@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chunav Saathi – Indian Election Guide</title>
+  <meta name="description" content="An interactive guide to understanding India's election process, voting steps, timelines, and government formation." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ===== LANGUAGE PICKER OVERLAY ===== -->
+<div class="lang-overlay" id="langOverlay">
+  <div class="lang-picker">
+    <div class="lang-picker-header">
+      <div class="lang-logo">🗳️</div>
+      <h1 class="lang-title">Chunav Saathi</h1>
+      <p class="lang-subtitle">Indian Election &amp; Government Guide</p>
+      <p class="lang-prompt">Select your preferred language to continue<br/>
+        <span class="lang-prompt-sub">अपनी भाषा चुनें • ನಿಮ್ಮ ಭಾಷೆ ಆಯ್ಕೆ ಮಾಡಿ • உங்கள் மொழியைத் தேர்ந்தெடுக்கவும்</span>
+      </p>
+    </div>
+    <div class="lang-grid" id="langGrid"></div>
+  </div>
+</div>
+
+
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <span class="logo-icon">🗳️</span>
+    <span class="logo-text">Chunav Saathi</span>
+  </div>
+  <div class="lang-indicator" id="langIndicator" onclick="openLangPicker()" title="Change Language">
+    <span id="langFlag">🇮🇳</span>
+    <span id="langLabel">English</span>
+    <span class="lang-change-icon">⇄</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#hero"       class="nav-link active" data-section="hero"><span data-i18n="nav_home">🏠 Home</span></a></li>
+    <li><a href="#overview"   class="nav-link" data-section="overview"><span data-i18n="nav_overview">🌐 Overview</span></a></li>
+    <li><a href="#video-guide" class="nav-link" data-section="video-guide"><span data-i18n="nav_video">🎬 Video Guide</span></a></li>
+    <li><a href="#voting"     class="nav-link" data-section="voting"><span data-i18n="nav_voting">🗳️ Voting Steps</span></a></li>
+    <li><a href="#timeline"   class="nav-link" data-section="timeline"><span data-i18n="nav_timeline">📅 Timeline</span></a></li>
+    <li><a href="#concepts"   class="nav-link" data-section="concepts"><span data-i18n="nav_concepts">💡 Key Concepts</span></a></li>
+    <li><a href="#government" class="nav-link" data-section="government"><span data-i18n="nav_govt">🏛️ Government</span></a></li>
+    <li><a href="#reference"  class="nav-link" data-section="reference"><span data-i18n="nav_ref">📋 Quick Ref</span></a></li>
+    <li><a href="#quiz"       class="nav-link" data-section="quiz"><span data-i18n="nav_quiz">🧠 Quiz</span></a></li>
+    <li><a href="#chat"       class="nav-link" data-section="chat"><span data-i18n="nav_chat">💬 Ask Me</span></a></li>
+  </ul>
+  <div class="sidebar-footer">
+    <span>Neutral & Educational</span>
+  </div>
+</nav>
+
+<!-- ===== HAMBURGER ===== -->
+<button class="hamburger" id="hamburger" aria-label="Toggle menu">☰</button>
+
+<!-- ===== MAIN CONTENT ===== -->
+<main class="main-content">
+
+  <!-- HERO -->
+  <section id="hero" class="section hero-section">
+    <div class="hero-bg-orbs">
+      <div class="orb orb1"></div>
+      <div class="orb orb2"></div>
+      <div class="orb orb3"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-badge" data-i18n="hero_badge">🇮🇳 Interactive Learning Guide</div>
+      <h1 class="hero-title" data-i18n="hero_title">How India Votes</h1>
+      <p class="hero-subtitle" data-i18n="hero_subtitle">Understand India's election system — from voter registration to government formation — in the simplest and most interactive way possible.</p>
+      <div class="hero-buttons">
+        <a href="#overview" class="btn btn-primary" data-i18n="btn_start">Start Learning →</a>
+        <a href="#chat"     class="btn btn-ghost"   data-i18n="btn_ask">Ask a Question 💬</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><span class="stat-num">970M+</span><span class="stat-lbl" data-i18n="stat_voters">Registered Voters</span></div>
+        <div class="stat"><span class="stat-num">543</span><span class="stat-lbl" data-i18n="stat_seats">Lok Sabha Seats</span></div>
+        <div class="stat"><span class="stat-num">7</span><span class="stat-lbl" data-i18n="stat_phases">Avg. Poll Phases</span></div>
+      </div>
+    </div>
+    <div class="hero-illustration">
+      <div class="evm-card">
+        <div class="evm-screen">EVM</div>
+        <div class="evm-buttons">
+          <div class="evm-btn"></div>
+          <div class="evm-btn"></div>
+          <div class="evm-btn"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OVERVIEW -->
+  <section id="overview" class="section">
+    <div class="section-header">
+      <div class="section-tag" data-i18n="tag_overview">Big Picture</div>
+      <h2 class="section-title" data-i18n="title_overview">The Indian Election System</h2>
+      <p class="section-sub" data-i18n="sub_overview">India is the world's largest democracy. Here's a high-level look at how it all works.</p>
+    </div>
+    <div class="overview-grid">
+      <div class="overview-card card-orange">
+        <div class="card-icon">⚖️</div>
+        <h3 data-i18n="overview_card1_title">Election Commission of India (ECI)</h3>
+        <p data-i18n="overview_card1_desc">An independent constitutional body that conducts free and fair elections across India. It sets dates, enforces the Model Code of Conduct, and oversees the entire process.</p>
+      </div>
+      <div class="overview-card card-blue">
+        <div class="card-icon">🏛️</div>
+        <h3 data-i18n="overview_card2_title">Lok Sabha Elections</h3>
+        <p data-i18n="overview_card2_desc">National Parliament elections held every 5 years. 543 constituencies, one MP elected from each. Determines who forms the Central Government.</p>
+      </div>
+      <div class="overview-card card-green">
+        <div class="card-icon">🏢</div>
+        <h3 data-i18n="overview_card3_title">Vidhan Sabha Elections</h3>
+        <p data-i18n="overview_card3_desc">State Legislature elections, also held every 5 years. Determines who forms the State Government and who becomes the Chief Minister.</p>
+      </div>
+      <div class="overview-card card-purple">
+        <div class="card-icon">🏘️</div>
+        <h3 data-i18n="overview_card4_title">Local Body Elections</h3>
+        <p data-i18n="overview_card4_desc">Municipal corporations, panchayats, and town councils. Closest to citizens — handles local infrastructure, sanitation, and development.</p>
+      </div>
+    </div>
+
+    <div class="info-banner">
+      <span class="info-icon">💡</span>
+      <span data-i18n="info_banner">India uses the <strong>First Past the Post (FPTP)</strong> system — the candidate with the <strong>most votes</strong> in a constituency wins, even without a majority.</span>
+    </div>
+  </section>
+
+  <!-- VIDEO GUIDE -->
+  <section id="video-guide" class="section">
+    <div class="section-header">
+      <div class="section-tag" data-i18n="tag_video">Accessible Learning</div>
+      <h2 class="section-title" data-i18n="title_video">Voting Process Explained</h2>
+      <p class="section-sub" data-i18n="sub_video">Watch the official step-by-step guide with subtitles and Indian Sign Language (ISL) support.</p>
+    </div>
+    
+    <div class="video-container">
+      <iframe class="accessible-video" src="https://www.youtube.com/embed/S2u2t9hZ264" title="Voting Process Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+    
+    <div class="video-fallback">
+      <h3 data-i18n="fallback_title">Interactive Walkthrough</h3>
+      <p data-i18n="fallback_desc">Prefer reading at your own pace? Use our animated visual guide below.</p>
+      
+      <div class="walkthrough-slider" id="walkthroughSlider">
+        <div class="slider-track" id="sliderTrack">
+          <div class="slide">
+            <div class="slide-icon">🚶</div>
+            <h4 data-i18n="vote_step1_title">Arrive at Your Polling Booth</h4>
+            <p data-i18n="vote_step1_desc">Find your assigned polling station using your Voter ID slip or the ECI Voter Helpline (1950). Booths are open <strong>7 AM – 6 PM</strong>.</p>
+          </div>
+          <div class="slide">
+            <div class="slide-icon">📋</div>
+            <h4 data-i18n="vote_step2_title">Queue &amp; Registration Check</h4>
+            <p data-i18n="vote_step2_desc">Officers check your name in the Electoral Roll and verify your photo identity document.</p>
+          </div>
+          <div class="slide">
+            <div class="slide-icon">🖊️</div>
+            <h4 data-i18n="vote_step3_title">Indelible Ink Mark</h4>
+            <p data-i18n="vote_step3_desc">A permanent ink mark is applied to your left index finger. This prevents anyone from voting twice — a simple but powerful safeguard.</p>
+          </div>
+          <div class="slide">
+            <div class="slide-icon">🔲</div>
+            <h4 data-i18n="vote_step4_title">Press the EVM Button</h4>
+            <p data-i18n="vote_step4_desc">Inside the voting compartment, press the button next to your chosen candidate's name and symbol on the <strong>Electronic Voting Machine (EVM)</strong>. A beep confirms your vote.</p>
+          </div>
+          <div class="slide">
+            <div class="slide-icon">🧾</div>
+            <h4 data-i18n="vote_step5_title">VVPAT Verification</h4>
+            <p data-i18n="vote_step5_desc">A paper slip from the <strong>Voter Verifiable Paper Audit Trail (VVPAT)</strong> machine shows your candidate's name and symbol for 7 seconds, then drops into a sealed box.</p>
+          </div>
+        </div>
+        
+        <div class="slider-controls">
+          <button class="slider-btn" id="sliderPrev" data-i18n="btn_prev">← Prev</button>
+          <div class="slider-dots" id="sliderDots">
+            <!-- Dots generated by JS -->
+          </div>
+          <button class="slider-btn" id="sliderNext" data-i18n="btn_next">Next →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VOTING STEPS -->
+  <section id="voting" class="section">
+    <div class="section-header">
+      <div class="section-tag" data-i18n="tag_voting">Step-by-Step</div>
+      <h2 class="section-title" data-i18n="title_voting">Your Voting Experience</h2>
+      <p class="section-sub" data-i18n="sub_voting">Here's exactly what happens when you go to vote on Election Day.</p>
+    </div>
+    <div class="flow-container">
+      <div class="flow-step" data-step="1">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-icon">🚶</div>
+          <h3 data-i18n="vote_step1_title">Arrive at Your Polling Booth</h3>
+          <p data-i18n="vote_step1_desc">Find your assigned polling station using your Voter ID slip or the ECI Voter Helpline (1950). Booths are open <strong>7 AM – 6 PM</strong>.</p>
+          <div class="step-tip" data-i18n="vote_step1_tip">💡 Tip: Bring your Voter ID card, Aadhaar, or any approved photo ID.</div>
+        </div>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step" data-step="2">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-icon">📋</div>
+          <h3 data-i18n="vote_step2_title">Queue &amp; Registration Check</h3>
+          <p data-i18n="vote_step2_desc">Officers check your name in the Electoral Roll and verify your photo identity document.</p>
+        </div>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step" data-step="3">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="step-icon">🖊️</div>
+          <h3 data-i18n="vote_step3_title">Indelible Ink Mark</h3>
+          <p data-i18n="vote_step3_desc">A permanent ink mark is applied to your left index finger. This prevents anyone from voting twice — a simple but powerful safeguard.</p>
+        </div>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step" data-step="4">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <div class="step-icon">🔲</div>
+          <h3 data-i18n="vote_step4_title">Press the EVM Button</h3>
+          <p data-i18n="vote_step4_desc">Inside the voting compartment, press the button next to your chosen candidate's name and symbol on the <strong>Electronic Voting Machine (EVM)</strong>. A beep confirms your vote.</p>
+        </div>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step" data-step="5">
+        <div class="step-num">5</div>
+        <div class="step-content">
+          <div class="step-icon">🧾</div>
+          <h3 data-i18n="vote_step5_title">VVPAT Verification</h3>
+          <p data-i18n="vote_step5_desc">A paper slip from the <strong>Voter Verifiable Paper Audit Trail (VVPAT)</strong> machine shows your candidate's name and symbol for 7 seconds, then drops into a sealed box. This lets you verify your vote was recorded correctly.</p>
+          <div class="step-tip" data-i18n="vote_step5_tip">✅ Done! You've successfully cast your vote.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TIMELINE -->
+  <section id="timeline" class="section">
+    <div class="section-header">
+      <div class="section-tag" data-i18n="tag_timeline">Timeline</div>
+      <h2 class="section-title" data-i18n="title_timeline">Election Calendar</h2>
+      <p class="section-sub" data-i18n="sub_timeline">From announcement to results — a typical Lok Sabha election spans 6–8 weeks.</p>
+    </div>
+    <div class="timeline-track">
+      <div class="tl-item">
+        <div class="tl-dot dot-orange"></div>
+        <div class="tl-card">
+          <span class="tl-week" data-i18n="time_week0">Week 0</span>
+          <h4 data-i18n="time_title0">📢 Election Announcement</h4>
+          <p data-i18n="time_desc0">ECI announces dates. Model Code of Conduct kicks in immediately.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot dot-yellow"></div>
+        <div class="tl-card">
+          <span class="tl-week" data-i18n="time_week1">Week 1–2</span>
+          <h4 data-i18n="time_title1">📝 Nomination Filing</h4>
+          <p data-i18n="time_desc1">Candidates file nominations with the Returning Officer. Scrutiny and withdrawal follows.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot dot-blue"></div>
+        <div class="tl-card">
+          <span class="tl-week" data-i18n="time_week2">Week 2–6</span>
+          <h4 data-i18n="time_title2">📣 Campaign Period</h4>
+          <p data-i18n="time_desc2">Parties and candidates campaign. No campaigning allowed within 48 hrs of polling (Silence Period).</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot dot-green"></div>
+        <div class="tl-card">
+          <span class="tl-week" data-i18n="time_week3">Week 3–8</span>
+          <h4 data-i18n="time_title3">🗳️ Multi-Phase Polling</h4>
+          <p data-i18n="time_desc3">Voting happens across multiple phases (up to 7) to deploy security forces efficiently. Polling time: <strong>7 AM – 6 PM</strong>.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot dot-purple"></div>
+        <div class="tl-card">
+          <span class="tl-week" data-i18n="time_week8">Week 8–9</span>
+          <h4 data-i18n="time_title8">📊 Vote Counting &amp; Results</h4>
+          <p data-i18n="time_desc8">EVMs are counted at designated centres. Results declared, usually within the same day of counting.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot dot-red"></div>
+        <div class="tl-card">
+          <span class="tl-week" data-i18n="time_week9">Week 9–10</span>
+          <h4 data-i18n="time_title9">🏛️ Government Formation</h4>
+          <p data-i18n="time_desc9">Winning party or coalition stakes claim. President invites the leader to form the government.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- KEY CONCEPTS -->
+  <section id="concepts" class="section">
+    <div class="section-header">
+      <div class="section-tag" data-i18n="tag_concepts">Key Concepts</div>
+      <h2 class="section-title" data-i18n="title_concepts">Understanding the Basics</h2>
+      <p class="section-sub" data-i18n="sub_concepts">Click any concept card to expand its explanation.</p>
+    </div>
+    <div class="concepts-grid">
+      <div class="concept-card" onclick="toggleConcept(this)">
+        <div class="concept-header">
+          <span class="concept-emoji">🏆</span>
+          <h3 data-i18n="concept1_title">First Past The Post (FPTP)</h3>
+          <span class="concept-toggle">+</span>
+        </div>
+        <div class="concept-body">
+          <p data-i18n="concept1_desc">The candidate who gets the <strong>most votes</strong> in their constituency wins — even if they don't have more than 50% of the total votes.</p>
+          <div class="concept-example" data-i18n="concept1_ex">
+            <strong>Example:</strong> In a 4-way race — A gets 35%, B gets 30%, C gets 20%, D gets 15%. Candidate A wins with just 35% of the votes!
+          </div>
+        </div>
+      </div>
+      <div class="concept-card" onclick="toggleConcept(this)">
+        <div class="concept-header">
+          <span class="concept-emoji">🗺️</span>
+          <h3 data-i18n="concept2_title">Constituencies</h3>
+          <span class="concept-toggle">+</span>
+        </div>
+        <div class="concept-body">
+          <p data-i18n="concept2_desc">India is divided into <strong>543 Lok Sabha constituencies</strong>. Each area elects exactly one Member of Parliament (MP) who represents that region in the national parliament.</p>
+          <div class="concept-example" data-i18n="concept2_ex">
+            <strong>Example:</strong> If you live in Mumbai North, you vote for one MP who represents all of Mumbai North in the Lok Sabha.
+          </div>
+        </div>
+      </div>
+      <div class="concept-card" onclick="toggleConcept(this)">
+        <div class="concept-header">
+          <span class="concept-emoji">🗓️</span>
+          <h3 data-i18n="concept3_title">Multi-Phase Elections</h3>
+          <span class="concept-toggle">+</span>
+        </div>
+        <div class="concept-body">
+          <p data-i18n="concept3_desc">India is too large to vote on a single day. Polling is spread across <strong>multiple phases</strong> (typically 4–7) so that security forces can be redeployed efficiently.</p>
+          <div class="concept-example" data-i18n="concept3_ex">
+            <strong>Example:</strong> In the 2024 Lok Sabha election, voting happened in 7 phases between April 19 and June 1.
+          </div>
+        </div>
+      </div>
+      <div class="concept-card" onclick="toggleConcept(this)">
+        <div class="concept-header">
+          <span class="concept-emoji">🔲</span>
+          <h3 data-i18n="concept4_title">EVM &amp; VVPAT</h3>
+          <span class="concept-toggle">+</span>
+        </div>
+        <div class="concept-body">
+          <p data-i18n="concept4_desc"><strong>EVM</strong> (Electronic Voting Machine) records your vote electronically. <strong>VVPAT</strong> (Voter Verifiable Paper Audit Trail) prints a paper slip showing your chosen candidate for 7 seconds so you can verify it.</p>
+          <div class="concept-example" data-i18n="concept4_ex">
+            <strong>Why it matters:</strong> VVPAT adds a paper trail that can be audited to verify EVM results if needed.
+          </div>
+        </div>
+      </div>
+      <div class="concept-card" onclick="toggleConcept(this)">
+        <div class="concept-header">
+          <span class="concept-emoji">🔢</span>
+          <h3 data-i18n="concept5_title">Magic Number: 272</h3>
+          <span class="concept-toggle">+</span>
+        </div>
+        <div class="concept-body">
+          <p data-i18n="concept5_desc">To form a majority government in the Lok Sabha, a party or coalition needs <strong>at least 272 seats</strong> (more than half of 543).</p>
+          <div class="concept-example" data-i18n="concept5_ex">
+            <strong>Simple math:</strong> 543 ÷ 2 = 271.5 → Round up → 272 seats needed for majority.
+          </div>
+        </div>
+      </div>
+      <div class="concept-card" onclick="toggleConcept(this)">
+        <div class="concept-header">
+          <span class="concept-emoji">📜</span>
+          <h3 data-i18n="concept6_title">Model Code of Conduct</h3>
+          <span class="concept-toggle">+</span>
+        </div>
+        <div class="concept-body">
+          <p data-i18n="concept6_desc">A set of guidelines issued by ECI that all parties and candidates must follow during the election period. It prevents misuse of government power for campaign advantage.</p>
+          <div class="concept-example" data-i18n="concept6_ex">
+            <strong>Example rule:</strong> No new government schemes or freebies can be announced after the MCC kicks in.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GOVERNMENT FORMATION -->
+  <section id="government" class="section">
+    <div class="section-header">
+      <div class="section-tag" data-i18n="tag_govt">After Results</div>
+      <h2 class="section-title" data-i18n="title_govt">How Government is Formed</h2>
+      <p class="section-sub" data-i18n="sub_govt">Once votes are counted, here's what happens next.</p>
+    </div>
+    <div class="govt-flow">
+      <div class="govt-step">
+        <div class="step-icon">1️⃣</div>
+        <h3 data-i18n="govt_step1_title">Results Declared</h3>
+        <p data-i18n="govt_step1_desc">The Election Commission declares results. The party or alliance with the most seats is identified.</p>
+      </div>
+      <div class="govt-arrow">→</div>
+      <div class="govt-step">
+        <div class="step-icon">2️⃣</div>
+        <h3 data-i18n="govt_step2_title">President Invites</h3>
+        <p data-i18n="govt_step2_desc">The President invites the leader of the party/alliance with majority support (272+ seats) to form the government.</p>
+      </div>
+      <div class="govt-arrow">→</div>
+      <div class="govt-step">
+        <div class="step-icon">3️⃣</div>
+        <h3 data-i18n="govt_step3_title">PM Takes Oath</h3>
+        <p data-i18n="govt_step3_desc">The Prime Minister and Cabinet are sworn in by the President at Rashtrapati Bhavan.</p>
+      </div>
+    </div>
+
+    <div class="hung-parliament">
+      <div class="hung-header">
+        <span>⚠️</span>
+        <h3 data-i18n="hung_title">What is a Hung Parliament?</h3>
+      </div>
+      <div class="hung-content">
+        <p data-i18n="hung_desc">When <strong>no single party wins 272+ seats</strong>, it's called a Hung Parliament. Parties then negotiate to form a <strong>coalition government</strong>. The President gives the largest party/alliance a chance to prove majority through a <strong>floor test</strong> in Parliament.</p>
+        <ul class="hung-examples">
+          <li data-i18n="hung_ex1">📅 1996 elections led to a hung parliament</li>
+          <li data-i18n="hung_ex2">📅 1999 — NDA coalition was formed</li>
+          <li data-i18n="hung_ex3">📅 2004 — UPA coalition was formed</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUICK REFERENCE -->
+  <section id="reference" class="section">
+    <div class="section-header">
+      <div class="section-tag" data-i18n="tag_ref">Quick Reference</div>
+      <h2 class="section-title" data-i18n="title_ref">Voter vs Candidate (MP)</h2>
+      <p class="section-sub" data-i18n="sub_ref">A side-by-side comparison of eligibility requirements.</p>
+    </div>
+    <div class="table-wrapper">
+      <table class="ref-table">
+        <thead>
+          <tr>
+            <th data-i18n="th_criteria">Criteria</th>
+            <th data-i18n="th_voter">🗳️ Voter</th>
+            <th data-i18n="th_mp">🏛️ Candidate (MP)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td data-i18n="tr1_cri">Minimum Age</td>
+            <td><span class="badge badge-green" data-i18n="tr1_voter">18 years</span></td>
+            <td><span class="badge badge-orange" data-i18n="tr1_mp">25 years</span></td>
+          </tr>
+          <tr>
+            <td data-i18n="tr2_cri">Citizenship</td>
+            <td data-i18n="tr2_voter">Indian Citizen</td>
+            <td data-i18n="tr2_mp">Indian Citizen</td>
+          </tr>
+          <tr>
+            <td data-i18n="tr3_cri">Registration</td>
+            <td data-i18n="tr3_voter">Must be on Electoral Roll</td>
+            <td data-i18n="tr3_mp">Must be a voter in some constituency</td>
+          </tr>
+          <tr>
+            <td data-i18n="tr4_cri">Mental Fitness</td>
+            <td data-i18n="tr4_voter">Must be of sound mind</td>
+            <td data-i18n="tr4_mp">Must not be declared unsound by court</td>
+          </tr>
+          <tr>
+            <td data-i18n="tr5_cri">Criminal Record</td>
+            <td data-i18n="tr5_voter">No restriction for voters</td>
+            <td data-i18n="tr5_mp">Disqualified if convicted with 2+ years sentence</td>
+          </tr>
+          <tr>
+            <td data-i18n="tr6_cri">Government Post</td>
+            <td data-i18n="tr6_voter">No restriction</td>
+            <td data-i18n="tr6_mp">Must resign from government/office of profit</td>
+          </tr>
+          <tr>
+            <td data-i18n="tr7_cri">NRI Status</td>
+            <td data-i18n="tr7_voter">Can register as overseas voter</td>
+            <td data-i18n="tr7_mp">Must be resident citizen</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="quick-facts">
+      <h3 data-i18n="qf_title">⚡ Quick Facts</h3>
+      <div class="facts-grid">
+        <div class="fact-chip" data-i18n="qf_1">🕖 Polling: 7 AM – 6 PM</div>
+        <div class="fact-chip" data-i18n="qf_2">📞 Voter Helpline: 1950</div>
+        <div class="fact-chip" data-i18n="qf_3">🖊️ Indelible Ink: Left index finger</div>
+        <div class="fact-chip" data-i18n="qf_4">📋 NOTA: Available on EVM</div>
+        <div class="fact-chip" data-i18n="qf_5">⏳ Term: 5 years</div>
+        <div class="fact-chip" data-i18n="qf_6">🏆 Winner: Most votes in constituency</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ASK ME / CHAT -->
+  <section id="chat" class="section">
+    <div class="section-header">
+      <div class="section-tag" data-i18n="tag_chat">Interactive</div>
+      <h2 class="section-title" data-i18n="title_chat">Ask Chunav Saathi 💬</h2>
+      <p class="section-sub" data-i18n="sub_chat">Powered by Gemini AI — ask <em>anything</em> about Indian government, elections, MLAs, MPs, the Constitution, and more.</p>
+    </div>
+
+    <!-- API KEY SETUP BANNER -->
+    <div class="api-banner" id="apiBanner">
+      <div class="api-banner-left">
+        <span class="api-status-dot" id="apiStatusDot"></span>
+        <div>
+          <div class="api-banner-title" id="apiBannerTitle">🔑 Connect Gemini AI for unlimited answers</div>
+          <div class="api-banner-sub" id="apiBannerSub">Get a free API key at <a href="https://aistudio.google.com/app/apikey" target="_blank">aistudio.google.com</a> — paste it below to unlock full AI answers.</div>
+        </div>
+      </div>
+      <div class="api-key-row" id="apiKeyRow">
+        <input type="password" id="apiKeyInput" class="api-key-input" placeholder="Paste your Gemini API key here..." />
+        <button class="api-save-btn" onclick="saveApiKey()">Save &amp; Connect</button>
+        <button class="api-clear-btn" id="apiClearBtn" onclick="clearApiKey()" style="display:none">Disconnect</button>
+      </div>
+    </div>
+
+    <div class="chat-container">
+      <div class="chat-window" id="chatWindow">
+        <div class="chat-msg bot">
+          <div class="msg-avatar">🗳️</div>
+          <div class="msg-bubble">
+            <p data-i18n="chat_msg1">Namaste! 🙏 I'm <strong>Chunav Saathi</strong>, your Indian Government &amp; Election guide.</p>
+            <p data-i18n="chat_msg2">With Gemini AI connected, I can answer <em>anything</em> — MLAs, MPs, Constitution, Panchayati Raj, State Govts, and more. Try:</p>
+            <div class="quick-prompts">
+              <button class="prompt-btn" onclick="askQuestion(this.innerText)" data-i18n="prompt1">What is an MLA's role?</button>
+              <button class="prompt-btn" onclick="askQuestion(this.innerText)" data-i18n="prompt2">How does voting work?</button>
+              <button class="prompt-btn" onclick="askQuestion(this.innerText)" data-i18n="prompt3">What is FPTP?</button>
+              <button class="prompt-btn" onclick="askQuestion(this.innerText)" data-i18n="prompt4">MLA vs MP?</button>
+              <button class="prompt-btn" onclick="askQuestion(this.innerText)" data-i18n="prompt5">Hung Parliament?</button>
+              <button class="prompt-btn" onclick="askQuestion(this.innerText)" data-i18n="prompt6">Panchayati Raj?</button>
+              <button class="prompt-btn" onclick="askQuestion(this.innerText)" data-i18n="prompt7">Candidate eligibility?</button>
+              <button class="prompt-btn" onclick="askQuestion(this.innerText)" data-i18n="prompt8">What is NOTA?</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="chat-input-row">
+        <input type="text" id="chatInput" class="chat-input" placeholder="Ask anything about Indian government or elections..." onkeydown="if(event.key==='Enter') sendMessage()" />
+        <button class="chat-send-btn" onclick="sendMessage()">Send ✈️</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUIZ SECTION -->
+  <section id="quiz" class="section">
+    <div class="section-header">
+      <div class="section-tag" data-i18n="tag_quiz">Test Yourself</div>
+      <h2 class="section-title" data-i18n="title_quiz">Election Quiz 🧠</h2>
+      <p class="section-sub" data-i18n="sub_quiz">10 questions to test your knowledge of the Indian election system. Can you score 10/10?</p>
+    </div>
+
+    <div class="quiz-container" id="quizContainer">
+
+      <!-- START SCREEN -->
+      <div class="quiz-screen" id="quizStartScreen">
+        <div class="quiz-start-icon">🗳️</div>
+        <h3 data-i18n="quiz_start_title">Ready to Test Your Knowledge?</h3>
+        <p data-i18n="quiz_start_desc">10 multiple-choice questions covering voting, EVM, FPTP, government formation, and more.</p>
+        <div class="quiz-rules">
+          <div class="rule-chip" data-i18n="quiz_rule1">✅ 10 Questions</div>
+          <div class="rule-chip" data-i18n="quiz_rule2">⏱️ No Time Limit</div>
+          <div class="rule-chip" data-i18n="quiz_rule3">🏆 Instant Feedback</div>
+          <div class="rule-chip" data-i18n="quiz_rule4">🔄 Retake Anytime</div>
+        </div>
+        <button class="btn btn-primary quiz-start-btn" onclick="startQuiz()" data-i18n="quiz_btn_start">Start Quiz →</button>
+      </div>
+
+      <!-- QUESTION SCREEN -->
+      <div class="quiz-screen hidden" id="quizPlayScreen">
+        <div class="quiz-top-bar">
+          <div class="quiz-progress-wrap">
+            <div class="quiz-progress-bar" id="quizProgressBar"></div>
+          </div>
+          <div class="quiz-counter" id="quizCounter">Question 1 / 10</div>
+        </div>
+        <div class="quiz-score-live">Score: <span id="liveScore">0</span> / <span id="liveTotal">10</span></div>
+        <div class="quiz-question-card" id="quizQuestionCard">
+          <div class="quiz-q-num" id="quizQNum">Q1</div>
+          <p class="quiz-q-text" id="quizQText">Question text here</p>
+          <div class="quiz-options" id="quizOptions"></div>
+          <div class="quiz-feedback hidden" id="quizFeedback"></div>
+          <button class="btn btn-primary quiz-next-btn hidden" id="quizNextBtn" onclick="nextQuestion()">Next →</button>
+        </div>
+      </div>
+
+      <!-- RESULT SCREEN -->
+      <div class="quiz-screen hidden" id="quizResultScreen">
+        <div class="result-trophy" id="resultTrophy">🏆</div>
+        <h3 class="result-title" id="resultTitle">Excellent!</h3>
+        <div class="result-score-ring">
+          <svg viewBox="0 0 120 120" class="score-ring-svg">
+            <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="10"/>
+            <circle cx="60" cy="60" r="50" fill="none" stroke-width="10"
+              stroke-linecap="round"
+              id="scoreRingCircle"
+              stroke-dasharray="314"
+              stroke-dashoffset="314"
+              transform="rotate(-90 60 60)"/>
+          </svg>
+          <div class="score-ring-text">
+            <span class="score-big" id="resultScoreNum">0</span>
+            <span class="score-denom">/10</span>
+          </div>
+        </div>
+        <p class="result-message" id="resultMessage">Great effort!</p>
+        <div class="result-breakdown" id="resultBreakdown"></div>
+        <div class="result-buttons">
+          <button class="btn btn-primary" onclick="retakeQuiz()" data-i18n="quiz_btn_retake">🔄 Retake Quiz</button>
+          <a href="#overview" class="btn btn-ghost" onclick="document.getElementById('overview').scrollIntoView({behavior:'smooth'})" data-i18n="quiz_btn_review">📖 Review Content</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+<script src="i18n.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
