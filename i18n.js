@@ -258,7 +258,6 @@ const UI_STRINGS = {
 
     quiz_start_title: 'మీ జ్ఞానాన్ని పరీక్షించడానికి సిద్ధంగా ఉన్నారా?', quiz_start_desc: 'ఓటింగ్, EVM, FPTP, ప్రభుత్వ ఏర్పాటు మరియు మరిన్నింటిని కవర్ చేసే 10 బహుళ-ఎంపిక ప్రశ్నలు.',
     quiz_rule1: '✅ 10 ప్రశ్నలు', quiz_rule2: '⏱️ సమయ పరిమితి లేదు', quiz_rule3: '🏆 తక్షణ ఫీడ్‌బ్యాక్', quiz_rule4: '🔄 ఎప్పుడైనా మళ్లీ తీసుకోండి',
-[ignoring loop detection]
     quiz_btn_start: 'క్విజ్ ప్రారంభించండి →', quiz_btn_retake: '🔄 క్విజ్ మళ్లీ తీసుకోండి', quiz_btn_review: '📖 కంటెంట్‌ను సమీక్షించండి'
   },
   kn: {
