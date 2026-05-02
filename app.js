@@ -428,26 +428,33 @@ const FALLBACKS = [
 // ===== GEMINI API CONFIG =====
 const GEMINI_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
 
+// Conversation history for context
+let conversationHistory = [];
+const MAX_HISTORY = 10; // keep last 10 exchanges
+
 function getSystemPrompt() {
   const lang = currentLang ? currentLang.name : 'English';
-  return `You are Chunav Saathi, a friendly and knowledgeable Indian civics and government education assistant.
-Your job is to clearly explain anything related to:
-- Indian elections (Lok Sabha, Vidhan Sabha, local body elections)
-- Indian government structure (President, PM, Cabinet, Parliament, State Govts)
-- Roles and duties (MLA, MP, CM, Governor, Minister, Panchayat members, etc.)
-- The Indian Constitution (articles, amendments, rights, duties)
-- Voting process, EVM, VVPAT, NOTA, Election Commission
-- Political parties, coalitions, hung parliament
-- Panchayati Raj system, municipal bodies
-- Any Indian civics topic
+  return `You are **Chunav Saathi**, a friendly, expert Indian civics and government education assistant.
 
-Rules:
-- Always stay neutral — no political opinions or party bias
-- Use simple, clear language suitable for a beginner
-- Structure answers with bullet points or numbered lists when helpful
-- Keep responses concise (3-6 sentences or a short list) unless the question requires more detail
-- If asked something completely unrelated to India or government, politely redirect to your area of expertise
-- IMPORTANT: You MUST respond ONLY in ${lang}. Do not use any other language regardless of what language the question is asked in.`;
+Your expertise covers:
+- Indian elections (Lok Sabha, Vidhan Sabha, Panchayat, local body elections)
+- Government structure (President, PM, Cabinet, Parliament, State Governments, Governor)
+- Roles & duties of MLA, MP, CM, Ministers, Panchayat members
+- The Indian Constitution (Fundamental Rights, Directive Principles, Amendments)
+- Voting process, EVM, VVPAT, NOTA, Election Commission of India
+- Political parties, coalitions, hung parliament, floor test
+- Panchayati Raj, municipal bodies, local governance
+
+Response Guidelines:
+1. Explain topics in **simple, structured steps** using bullet points, numbered lists, and examples.
+2. Avoid complex legal jargon — write as if explaining to a first-time voter.
+3. Use bold (**text**) for key terms and important facts.
+4. Keep answers concise (4-8 bullet points or 3-5 short paragraphs) unless more detail is needed.
+5. Include a real-world example or analogy when possible to make concepts relatable.
+6. Always stay **strictly neutral** — no political opinions, party bias, or endorsements.
+7. If asked something unrelated to Indian government/elections, politely redirect.
+8. The user may ask follow-up questions like "explain that simpler" or "tell me more" — use the conversation context to understand what they refer to.
+9. CRITICAL: You MUST respond ONLY in **${lang}**. Do not use any other language regardless of what language the question is asked in.`;
 }
 
 const DEFAULT_API_KEY   = 'AIzaSyCjZGY2fgtgdZB9i4UYvDeKXV9ega-hAgY';
@@ -553,10 +560,22 @@ function applyConnectedState(connected) {
 
 // ===== GEMINI API CALL =====
 async function callGeminiApi(question) {
+  // Build contents array with conversation history for context
+  const contents = [];
+  
+  // Add recent conversation history for follow-up support
+  conversationHistory.forEach(entry => {
+    contents.push({ role: 'user', parts: [{ text: entry.user }] });
+    contents.push({ role: 'model', parts: [{ text: entry.bot }] });
+  });
+  
+  // Add current question
+  contents.push({ role: 'user', parts: [{ text: question }] });
+
   const body = {
     system_instruction: { parts: [{ text: getSystemPrompt() }] },
-    contents: [{ role: 'user', parts: [{ text: question }] }],
-    generationConfig: { temperature: 0.7, maxOutputTokens: 600 }
+    contents: contents,
+    generationConfig: { temperature: 0.7, maxOutputTokens: 800 }
   };
 
   const resp = await fetch(`${GEMINI_ENDPOINT}?key=${geminiApiKey}`, {
@@ -575,35 +594,78 @@ async function callGeminiApi(question) {
   }
 
   const data = await resp.json();
-  return data?.candidates?.[0]?.content?.parts?.[0]?.text || 'Sorry, I did not get a response. Please try again.';
+  const answer = data?.candidates?.[0]?.content?.parts?.[0]?.text || 'Sorry, I did not get a response. Please try again.';
+  
+  // Save to conversation history
+  conversationHistory.push({ user: question, bot: answer });
+  if (conversationHistory.length > MAX_HISTORY) {
+    conversationHistory.shift(); // trim oldest
+  }
+  
+  return answer;
 }
 
 let fallbackIndex = 0;
 
+// Smart routing: decide whether to use KB or AI
+function isComplexQuery(question) {
+  const q = question.toLowerCase().trim();
+  // Follow-up phrases always go to AI (need context)
+  const followUpPhrases = ['explain that', 'tell me more', 'what do you mean', 'simplify', 'elaborate', 'why', 'how come', 'can you clarify', 'in detail', 'give example', 'compare'];
+  if (followUpPhrases.some(p => q.includes(p))) return true;
+  // Long queries (>8 words) are likely complex
+  if (q.split(/\s+/).length > 8) return true;
+  // Questions with multiple concepts
+  if ((q.match(/\b(and|vs|versus|between|difference|compare|relation)\b/g) || []).length > 0) return true;
+  return false;
+}
+
+function findKBAnswer(question) {
+  const q = question.toLowerCase();
+  for (const item of KB) {
+    if (item.keys.some(k => q.includes(k))) return item.answer;
+  }
+  return null;
+}
+
 async function findAnswer(question) {
-  // If Gemini key is set, use AI
+  // If Gemini key is set
   if (geminiApiKey) {
+    const kbAnswer = findKBAnswer(question);
+    const complex = isComplexQuery(question);
+    
+    // Use KB for simple, direct matches; AI for complex/follow-ups
+    if (kbAnswer && !complex) {
+      // Save KB answer to history too so AI knows context
+      conversationHistory.push({ user: question, bot: kbAnswer });
+      if (conversationHistory.length > MAX_HISTORY) conversationHistory.shift();
+      return { text: kbAnswer, source: 'kb' };
+    }
+    
+    // Use Gemini AI
     try {
-      return await callGeminiApi(question);
+      const aiAnswer = await callGeminiApi(question);
+      return { text: aiAnswer, source: 'ai' };
     } catch (err) {
       if (err.message.includes('Invalid API key') || err.message.includes('access denied')) {
         geminiApiKey = '';
         localStorage.removeItem('chunav_gemini_key');
         applyConnectedState(false);
-        return `⚠️ **API key issue:** ${err.message}\n\nI've disconnected the key. Please check your key and reconnect. Falling back to built-in answers for now.`;
+        return { text: `⚠️ **API key issue:** ${err.message}\n\nI've disconnected the key. Please check your key and reconnect.`, source: 'error' };
       }
-      return `⚠️ **Gemini API error:** ${err.message}\n\nPlease check your internet connection and try again.`;
+      // AI failed, try KB fallback
+      if (kbAnswer) return { text: kbAnswer, source: 'kb' };
+      return { text: `⚠️ **Connection error:** ${err.message}\n\nPlease check your internet and try again.`, source: 'error' };
     }
   }
 
-  // Fallback: local KB
-  const q = question.toLowerCase();
-  for (const item of KB) {
-    if (item.keys.some(k => q.includes(k))) return item.answer;
-  }
+  // No API key: local KB only
+  const kbAnswer = findKBAnswer(question);
+  if (kbAnswer) return { text: kbAnswer, source: 'kb' };
+  
   const resp = FALLBACKS[fallbackIndex % FALLBACKS.length];
   fallbackIndex++;
-  return resp;
+  return { text: resp, source: 'fallback' };
 }
 
 // ===== RENDER MARKDOWN (SIMPLE) =====
@@ -630,7 +692,7 @@ function renderMarkdown(text) {
 }
 
 // ===== ADD MESSAGE TO CHAT =====
-function addMessage(text, isUser = false) {
+function addMessage(text, isUser = false, source = null) {
   const chatWindow = document.getElementById('chatWindow');
   const msg = document.createElement('div');
   msg.className = `chat-msg ${isUser ? 'user' : 'bot'}`;
@@ -642,6 +704,23 @@ function addMessage(text, isUser = false) {
   const bubble = document.createElement('div');
   bubble.className = 'msg-bubble';
   bubble.innerHTML = renderMarkdown(text);
+  
+  // Add source label for bot messages
+  if (!isUser && source) {
+    const sourceLabel = document.createElement('div');
+    sourceLabel.className = 'msg-source';
+    if (source === 'ai') {
+      sourceLabel.innerHTML = '🤖 <span>Generated by Gemini AI</span>';
+      sourceLabel.classList.add('source-ai');
+    } else if (source === 'kb') {
+      sourceLabel.innerHTML = '📚 <span>From knowledge base</span>';
+      sourceLabel.classList.add('source-kb');
+    } else if (source === 'error') {
+      sourceLabel.innerHTML = '⚠️ <span>Error</span>';
+      sourceLabel.classList.add('source-error');
+    }
+    bubble.appendChild(sourceLabel);
+  }
 
   msg.appendChild(avatar);
   msg.appendChild(bubble);
@@ -650,8 +729,69 @@ function addMessage(text, isUser = false) {
   return msg;
 }
 
+// ===== TYPING EFFECT FOR BOT RESPONSES =====
+function addMessageWithTyping(text, source = null) {
+  return new Promise(resolve => {
+    const chatWindow = document.getElementById('chatWindow');
+    const msg = document.createElement('div');
+    msg.className = 'chat-msg bot';
+
+    const avatar = document.createElement('div');
+    avatar.className = 'msg-avatar';
+    avatar.textContent = '🗳️';
+
+    const bubble = document.createElement('div');
+    bubble.className = 'msg-bubble';
+    bubble.innerHTML = '<span class="typing-cursor">▍</span>';
+
+    msg.appendChild(avatar);
+    msg.appendChild(bubble);
+    chatWindow.appendChild(msg);
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+
+    const fullHTML = renderMarkdown(text);
+    // Extract plain text for typing, then reveal full HTML
+    const plainText = text.replace(/\*\*|\*|#{1,3} /g, '').substring(0, 120);
+    let charIndex = 0;
+    const speed = 15; // ms per character
+
+    function typeNext() {
+      if (charIndex < plainText.length) {
+        bubble.innerHTML = plainText.substring(0, charIndex + 1) + '<span class="typing-cursor">▍</span>';
+        charIndex++;
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+        setTimeout(typeNext, speed);
+      } else {
+        // Typing done — reveal full formatted response
+        bubble.innerHTML = fullHTML;
+        
+        // Add source label
+        if (source) {
+          const sourceLabel = document.createElement('div');
+          sourceLabel.className = 'msg-source';
+          if (source === 'ai') {
+            sourceLabel.innerHTML = '🤖 <span>Generated by Gemini AI</span>';
+            sourceLabel.classList.add('source-ai');
+          } else if (source === 'kb') {
+            sourceLabel.innerHTML = '📚 <span>From knowledge base</span>';
+            sourceLabel.classList.add('source-kb');
+          } else if (source === 'error') {
+            sourceLabel.innerHTML = '⚠️ <span>Error</span>';
+            sourceLabel.classList.add('source-error');
+          }
+          bubble.appendChild(sourceLabel);
+        }
+        
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+        resolve(msg);
+      }
+    }
+    typeNext();
+  });
+}
+
 // ===== TYPING INDICATOR =====
-function showTyping() {
+function showTyping(label) {
   const chatWindow = document.getElementById('chatWindow');
   const msg = document.createElement('div');
   msg.className = 'chat-msg bot';
@@ -667,6 +807,7 @@ function showTyping() {
     <div class="typing-dot"></div>
     <div class="typing-dot"></div>
     <div class="typing-dot"></div>
+    <span class="thinking-label">${label || '🤖 AI is thinking…'}</span>
   </div>`;
 
   msg.appendChild(avatar);
@@ -690,17 +831,22 @@ function sendMessage() {
   input.value = '';
   input.disabled = true;
 
-  showTyping();
+  // Determine thinking label
+  const kbMatch = findKBAnswer(text);
+  const complex = isComplexQuery(text);
+  const willUseAI = geminiApiKey && (!kbMatch || complex);
+  const thinkLabel = willUseAI ? '🤖 AI is thinking…' : '📚 Searching knowledge base…';
+  showTyping(thinkLabel);
 
   // findAnswer is now async (Gemini or local KB)
-  findAnswer(text).then(answer => {
+  findAnswer(text).then(async (result) => {
     hideTyping();
-    addMessage(answer, false);
+    await addMessageWithTyping(result.text, result.source);
     input.disabled = false;
     input.focus();
   }).catch(() => {
     hideTyping();
-    addMessage('⚠️ Something went wrong. Please try again.', false);
+    addMessage('⚠️ Something went wrong. Please try again.', false, 'error');
     input.disabled = false;
   });
 }
