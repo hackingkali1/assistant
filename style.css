@@ -1478,3 +1478,60 @@ body {
 .source-ai span { color: #b48efa; }
 .source-kb span { color: #06d6a0; }
 .source-error span { color: #ef476f; }
+
+/* ===== VIDEO CARD ===== */
+.video-card-link {
+  text-decoration: none;
+  display: block;
+}
+.video-card {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  max-width: 800px;
+  margin: 0 auto;
+  aspect-ratio: 16/9;
+}
+.video-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 40px rgba(78,168,222,0.3);
+}
+.video-thumbnail {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.video-play-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: rgba(0,0,0,0.35);
+  transition: background 0.3s ease;
+}
+.video-card:hover .video-play-overlay {
+  background: rgba(0,0,0,0.15);
+}
+.play-button {
+  transition: transform 0.3s ease;
+}
+.video-card:hover .play-button {
+  transform: scale(1.15);
+}
+.play-label {
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  background: rgba(0,0,0,0.6);
+  padding: 6px 18px;
+  border-radius: 20px;
+  backdrop-filter: blur(4px);
+}
