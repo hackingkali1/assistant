@@ -33,9 +33,22 @@
   margin-bottom: 40px;
 }
 .lang-logo {
-  font-size: 3.2rem;
   margin-bottom: 12px;
   animation: float 4s ease-in-out infinite;
+}
+.lang-logo-img {
+  width: 80px;
+  height: 80px;
+  border-radius: 16px;
+  object-fit: cover;
+  filter: drop-shadow(0 4px 12px rgba(78,168,222,0.4));
+}
+.sidebar-logo-img {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  object-fit: cover;
+  filter: drop-shadow(0 2px 6px rgba(78,168,222,0.3));
 }
 .lang-title {
   font-family: 'Poppins', sans-serif;
