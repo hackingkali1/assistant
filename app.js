@@ -176,14 +176,21 @@ function openLangPicker() {
 }
 
 function showLanguagePicker() {
-  // Hide welcome screen with animation
   const welcome = document.getElementById('welcomeOverlay');
+  const savedLangCode = localStorage.getItem('chunav_lang');
+  
   if (welcome) {
     welcome.classList.add('hiding');
     setTimeout(() => {
       welcome.classList.add('hidden');
-      // Show language picker
-      openLangPicker();
+      
+      if (savedLangCode) {
+        // Returning visitor: language already applied, go straight to main app
+        // No need to show language picker again
+      } else {
+        // First-time visitor: show language picker
+        openLangPicker();
+      }
     }, 500);
   }
 }
@@ -578,7 +585,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   const savedLangCode = localStorage.getItem('chunav_lang');
   if (savedLangCode) {
-    // Returning visitor: restore language silently (skip welcome + lang picker)
+    // Returning visitor: pre-apply language but still show welcome screen
     const lang = LANGUAGES.find(l => l.code === savedLangCode) || LANGUAGES[0];
     currentLang = lang;
 
@@ -598,10 +605,8 @@ window.addEventListener('DOMContentLoaded', () => {
     // Update chat welcome in chosen language
     updateChatWelcome(lang);
 
-    // Hide BOTH overlays immediately (no animation)
-    const welcome = document.getElementById('welcomeOverlay');
+    // Keep lang picker hidden (welcome screen is visible)
     const langOverlay = document.getElementById('langOverlay');
-    if (welcome) welcome.classList.add('hidden');
     if (langOverlay) langOverlay.classList.add('hidden');
 
     // Apply UI text translations
@@ -609,7 +614,7 @@ window.addEventListener('DOMContentLoaded', () => {
       applyTranslations(lang.code);
     }
   }
-  // else: first visit — welcome screen is visible, lang picker is hidden
+  // Welcome screen is always visible on load for everyone
 
   if (geminiApiKey) {
     applyConnectedState(true);
