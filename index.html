@@ -11,8 +11,36 @@
 </head>
 <body>
 
+<!-- ===== WELCOME SCREEN ===== -->
+<div class="welcome-overlay" id="welcomeOverlay">
+  <div class="welcome-content">
+    <div class="welcome-particles">
+      <div class="particle p1"></div>
+      <div class="particle p2"></div>
+      <div class="particle p3"></div>
+      <div class="particle p4"></div>
+      <div class="particle p5"></div>
+    </div>
+    <div class="welcome-logo-wrap">
+      <img src="parliament-logo.png" alt="Chunav Saathi" class="welcome-logo-img" />
+    </div>
+    <h1 class="welcome-title">Chunav Saathi</h1>
+    <p class="welcome-tagline">Your Interactive Guide to Indian Democracy</p>
+    <div class="welcome-features">
+      <div class="wf-item">🗳️ <span>Voting Process</span></div>
+      <div class="wf-item">🏛️ <span>Government</span></div>
+      <div class="wf-item">🧠 <span>Quiz</span></div>
+      <div class="wf-item">💬 <span>AI Assistant</span></div>
+    </div>
+    <button class="welcome-btn" id="welcomeStartBtn" onclick="showLanguagePicker()">
+      Get Started →
+    </button>
+    <p class="welcome-footer">Made for every Indian citizen 🇮🇳</p>
+  </div>
+</div>
+
 <!-- ===== LANGUAGE PICKER OVERLAY ===== -->
-<div class="lang-overlay" id="langOverlay">
+<div class="lang-overlay hidden" id="langOverlay">
   <div class="lang-picker">
     <div class="lang-picker-header">
       <div class="lang-logo"><img src="parliament-logo.png" alt="Chunav Saathi" class="lang-logo-img" /></div>

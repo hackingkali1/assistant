@@ -175,6 +175,19 @@ function openLangPicker() {
   overlay.classList.remove('hidden', 'hiding');
 }
 
+function showLanguagePicker() {
+  // Hide welcome screen with animation
+  const welcome = document.getElementById('welcomeOverlay');
+  if (welcome) {
+    welcome.classList.add('hiding');
+    setTimeout(() => {
+      welcome.classList.add('hidden');
+      // Show language picker
+      openLangPicker();
+    }, 500);
+  }
+}
+
 function showToast(msg) {
   let toast = document.getElementById('langToast');
   if (!toast) {
@@ -565,7 +578,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   const savedLangCode = localStorage.getItem('chunav_lang');
   if (savedLangCode) {
-    // Returning visitor: restore language silently (no overlay)
+    // Returning visitor: restore language silently (skip welcome + lang picker)
     const lang = LANGUAGES.find(l => l.code === savedLangCode) || LANGUAGES[0];
     currentLang = lang;
 
@@ -585,18 +598,18 @@ window.addEventListener('DOMContentLoaded', () => {
     // Update chat welcome in chosen language
     updateChatWelcome(lang);
 
-    // Hide overlay immediately (no animation)
-    const overlay = document.getElementById('langOverlay');
-    if (overlay) {
-      overlay.classList.add('hidden');
-    }
+    // Hide BOTH overlays immediately (no animation)
+    const welcome = document.getElementById('welcomeOverlay');
+    const langOverlay = document.getElementById('langOverlay');
+    if (welcome) welcome.classList.add('hidden');
+    if (langOverlay) langOverlay.classList.add('hidden');
 
     // Apply UI text translations
     if (typeof applyTranslations === 'function') {
       applyTranslations(lang.code);
     }
   }
-  // else: first visit — overlay stays visible
+  // else: first visit — welcome screen is visible, lang picker is hidden
 
   if (geminiApiKey) {
     applyConnectedState(true);
