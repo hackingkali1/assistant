@@ -177,20 +177,11 @@ function openLangPicker() {
 
 function showLanguagePicker() {
   const welcome = document.getElementById('welcomeOverlay');
-  const savedLangCode = localStorage.getItem('chunav_lang');
-  
   if (welcome) {
     welcome.classList.add('hiding');
     setTimeout(() => {
       welcome.classList.add('hidden');
-      
-      if (savedLangCode) {
-        // Returning visitor: language already applied, go straight to main app
-        // No need to show language picker again
-      } else {
-        // First-time visitor: show language picker
-        openLangPicker();
-      }
+      openLangPicker();
     }, 500);
   }
 }
