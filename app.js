@@ -402,6 +402,105 @@ The MCC is a set of guidelines issued by the ECI that all parties, candidates, a
 - Star campaigners must get ECI permission for rallies
 
 **Violation** can lead to disqualification of candidates or legal action.`
+  },
+  {
+    keys: ['mla', 'member of legislative assembly', 'vidhayak', 'state legislature', 'vidhan sabha member'],
+    answer: `**MLA — Member of Legislative Assembly** 🏛️
+
+An MLA (Member of Legislative Assembly) is an elected representative at the **state level**.
+
+**Key facts:**
+- Elected by voters in a **Vidhan Sabha constituency** (state assembly seat)
+- Minimum age: **25 years**
+- Represents local issues in the state legislature
+- Participates in making **state laws** (education, police, healthcare, land)
+- The party with the most MLAs forms the **state government**
+- Their leader becomes the **Chief Minister (CM)**
+
+**MLA vs MP:**
+- MLA = State level (Vidhan Sabha)
+- MP = National level (Lok Sabha / Rajya Sabha)
+
+India has ~4,100+ MLAs across all states and UTs.`
+  },
+  {
+    keys: ['panchayat', 'panchayati raj', 'gram panchayat', 'local government', 'sarpanch', 'village'],
+    answer: `**Panchayati Raj — Local Self-Government** 🏘️
+
+Panchayati Raj is India's **3-tier local government** system established by the **73rd Constitutional Amendment (1992)**.
+
+**Three levels:**
+1. **Gram Panchayat** — Village level (headed by **Sarpanch**)
+2. **Panchayat Samiti / Block** — Block level (group of villages)
+3. **Zila Parishad** — District level
+
+**Key features:**
+- Elections held every **5 years**
+- **1/3 seats reserved for women**
+- Handles local issues: roads, water, sanitation, schools
+- Gets funds from state government + central schemes
+
+Panchayati Raj brings democracy to the grassroots level — empowering villages to govern themselves.`
+  },
+  {
+    keys: ['constitution', 'fundamental rights', 'directive principles', 'article', 'amendment'],
+    answer: `**The Indian Constitution** 📜
+
+The Indian Constitution is the **longest written constitution** in the world, adopted on **26 January 1950**.
+
+**Key features:**
+- Written by the **Constituent Assembly** headed by Dr. B.R. Ambedkar
+- Originally had **395 Articles** and **8 Schedules**
+- Now has **470+ Articles** and **12 Schedules** (after amendments)
+
+**Important parts:**
+- **Fundamental Rights** (Articles 14-32): Right to Equality, Freedom, Religion, etc.
+- **Directive Principles** (Articles 36-51): Guidelines for government policy
+- **Fundamental Duties** (Article 51A): 11 duties of every citizen
+
+**Key amendments:**
+- 42nd (1976): Added "Socialist, Secular" to Preamble
+- 73rd & 74th (1992): Panchayati Raj & Municipal bodies
+- 61st (1988): Voting age reduced from 21 to 18`
+  },
+  {
+    keys: ['rajya sabha', 'upper house', 'council of states'],
+    answer: `**Rajya Sabha — Council of States** 🏛️
+
+The Rajya Sabha is the **upper house** of India's Parliament.
+
+**Key facts:**
+- Maximum **250 members** (238 elected + 12 nominated by President)
+- Members are **NOT directly elected** by voters — they are elected by state MLAs
+- Term: **6 years** (1/3 members retire every 2 years)
+- **Cannot be dissolved** — it is a permanent house
+
+**Powers:**
+- Can introduce and pass most bills
+- **Cannot** introduce Money Bills (only Lok Sabha can)
+- Can delay bills but **cannot block** them permanently
+- Plays a key role in **Constitutional amendments** (needs 2/3 majority in both houses)
+
+The Vice President of India serves as the **Chairman of Rajya Sabha**.`
+  },
+  {
+    keys: ['lok sabha', 'lower house', 'house of the people'],
+    answer: `**Lok Sabha — House of the People** 🏛️
+
+The Lok Sabha is the **lower house** and the **more powerful** house of India's Parliament.
+
+**Key facts:**
+- **543 elected members** (each from a constituency using FPTP)
+- Term: **5 years** (can be dissolved earlier by the President)
+- The party/alliance with **272+ seats** forms the government
+- Its leader becomes the **Prime Minister**
+
+**Special powers (Lok Sabha only):**
+- Can introduce and pass **Money Bills**
+- Can give **no-confidence motion** against the PM
+- Controls the **national budget**
+
+**Speaker:** The Lok Sabha elects a Speaker to preside over sessions and maintain order.`
   }
 ];
 
@@ -653,9 +752,12 @@ async function findAnswer(question) {
         applyConnectedState(false);
         return { text: `⚠️ **API key issue:** ${err.message}\n\nI've disconnected the key. Please check your key and reconnect.`, source: 'error' };
       }
-      // AI failed, try KB fallback
-      if (kbAnswer) return { text: kbAnswer, source: 'kb' };
-      return { text: `⚠️ **Connection error:** ${err.message}\n\nPlease check your internet and try again.`, source: 'error' };
+      // Quota or network error — try KB fallback silently
+      if (kbAnswer) {
+        return { text: kbAnswer + '\n\n---\n*⚡ Answered from knowledge base (AI quota temporarily exceeded)*', source: 'kb' };
+      }
+      // No KB match either — show a helpful error
+      return { text: `⚠️ **AI is temporarily unavailable** (quota exceeded).\n\nTry asking about topics I know from my built-in database:\n- 🗳️ How voting works\n- 🏛️ MLA, MP, Lok Sabha, Rajya Sabha\n- 📜 Constitution, Fundamental Rights\n- 🏘️ Panchayati Raj\n- 🔲 EVM & VVPAT\n- 📅 Election timeline\n\nOr try again later when the AI quota resets!`, source: 'error' };
     }
   }
 
